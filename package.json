@@ -5,6 +5,6 @@
     "ts-proto": "^1.133.0"
   },
   "scripts": {
-    "build": "buf generate"
+    "build": "buf build && buf generate"
   }
 }

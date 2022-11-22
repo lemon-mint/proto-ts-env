@@ -3,10 +3,12 @@ syntax = "proto3";
 package proto;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
 
 message ErrorStatus {
   string message = 1;
   repeated google.protobuf.Any details = 2;
+  google.protobuf.NullValue null_value = 3;
 }
 
 message Message {

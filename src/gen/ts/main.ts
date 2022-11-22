@@ -1,12 +1,14 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
-import { Any } from "../google/protobuf/any";
+import { Any } from "./google/protobuf/any";
+import { NullValue, nullValueFromJSON, nullValueToJSON } from "./google/protobuf/struct";
 
 export const protobufPackage = "proto";
 
 export interface ErrorStatus {
   message: string;
   details: Any[];
+  nullValue: NullValue;
 }
 
 export interface Message {
@@ -15,7 +17,7 @@ export interface Message {
 }
 
 function createBaseErrorStatus(): ErrorStatus {
-  return { message: "", details: [] };
+  return { message: "", details: [], nullValue: 0 };
 }
 
 export const ErrorStatus = {
@@ -25,6 +27,9 @@ export const ErrorStatus = {
     }
     for (const v of message.details) {
       Any.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.nullValue !== 0) {
+      writer.uint32(24).int32(message.nullValue);
     }
     return writer;
   },
@@ -42,6 +47,9 @@ export const ErrorStatus = {
         case 2:
           message.details.push(Any.decode(reader, reader.uint32()));
           break;
+        case 3:
+          message.nullValue = reader.int32() as any;
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -54,6 +62,7 @@ export const ErrorStatus = {
     return {
       message: isSet(object.message) ? String(object.message) : "",
       details: Array.isArray(object?.details) ? object.details.map((e: any) => Any.fromJSON(e)) : [],
+      nullValue: isSet(object.nullValue) ? nullValueFromJSON(object.nullValue) : 0,
     };
   },
 
@@ -65,6 +74,7 @@ export const ErrorStatus = {
     } else {
       obj.details = [];
     }
+    message.nullValue !== undefined && (obj.nullValue = nullValueToJSON(message.nullValue));
     return obj;
   },
 
@@ -72,6 +82,7 @@ export const ErrorStatus = {
     const message = createBaseErrorStatus();
     message.message = object.message ?? "";
     message.details = object.details?.map((e) => Any.fromPartial(e)) || [];
+    message.nullValue = object.nullValue ?? 0;
     return message;
   },
 };
